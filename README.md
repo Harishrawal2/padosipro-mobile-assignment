@@ -73,11 +73,3 @@ npx eas-cli build -p android --profile preview
 ```
 
 ---
-
-## 🐙 Git Workflow
-
-```bash
-git add .
-git commit -m "feat: updated android prebuild configs and documentation"
-git push origin main
-```
