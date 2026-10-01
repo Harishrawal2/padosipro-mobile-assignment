@@ -1,56 +1,96 @@
-# Welcome to your Expo app 👋
+# PadosiPro Mobile
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native + Expo mobile application for the PadosiPro platform.
 
-## Get started
+## Tech Stack
 
-1. Install dependencies
+- **React Native** + **Expo SDK 52**
+- **TypeScript** (strict mode)
+- **Expo Router** v4 (file-based routing)
+- **Axios** (API client)
+- **React Hook Form** + **Zod** (form validation)
+- **Expo SecureStore** (secure token storage)
 
-   ```bash
-   npm install
-   ```
+## Architecture
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+src/
+├── api/          # API layer (client + per-resource functions)
+├── components/   # Reusable UI components
+├── constants/    # Route names + app config
+├── hooks/        # useAuth, useTasks
+├── screens/      # Feature screens (auth, onboarding, tasks)
+├── store/        # Auth context
+├── theme/        # Colors, spacing, typography
+├── types/        # TypeScript interfaces
+└── utils/        # Validation schemas, secure storage
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## User Flow
 
-### Other setup steps
+```
+Register → Verify OTP → Login
+  └── Profile Incomplete → Profile Screen → Task Selection → Home
+  └── Profile Complete   → Home
+App Restart → Restore Auth → Home (if authenticated)
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Setup
 
-## Learn more
+### 1. Configure environment
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+cp .env.example .env
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Edit `.env`:
+```
+EXPO_PUBLIC_API_URL=http://YOUR_LOCAL_IP:5000/api/v1
+```
 
-## Join the community
+> Use your machine's LAN IP (not `localhost`) when testing on a physical Android device.
 
-Join our community of developers creating universal apps.
+### 2. Install dependencies
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```bash
+npm install
+```
+
+### 3. Start the backend
+
+```bash
+cd ../padosipro-backend
+npm run dev
+```
+
+### 4. Start the mobile app
+
+```bash
+npm start
+```
+
+Scan the QR code with **Expo Go** on Android.
+
+## Key Features
+
+- ✅ Register with email + OTP verification
+- ✅ Login with unverified account redirect to OTP
+- ✅ Secure JWT storage (Expo SecureStore)
+- ✅ Auth persistence across app restarts
+- ✅ Profile onboarding (first login only)
+- ✅ Task catalogue from API (grouped by category)
+- ✅ Task search + multi-select
+- ✅ Selected tasks saved and displayed on Home
+- ✅ Loading / error / empty states everywhere
+- ✅ Logout with token revocation
+
+## Build APK
+
+```bash
+npx eas build -p android --profile preview
+```
+
+Or for local build:
+```bash
+npx expo run:android
+```
