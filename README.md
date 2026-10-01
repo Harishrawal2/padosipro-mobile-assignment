@@ -1,96 +1,83 @@
-# PadosiPro Mobile
+# PadosiPro Mobile App
 
-A React Native + Expo mobile application for the PadosiPro platform.
+React Native mobile client built with **Expo (SDK 57)**, **Expo Router**, **TypeScript**, **React Hook Form**, and **Axios** for the PadosiPro full-stack platform.
 
-## Tech Stack
+---
 
-- **React Native** + **Expo SDK 52**
-- **TypeScript** (strict mode)
-- **Expo Router** v4 (file-based routing)
-- **Axios** (API client)
-- **React Hook Form** + **Zod** (form validation)
-- **Expo SecureStore** (secure token storage)
+## 🚀 Features
 
-## Architecture
+* **Authentication & OTP Verification**:
+  * User Registration & Login screens.
+  * 6-digit OTP verification screen with resend timer.
+  * Token storage using `expo-secure-store`.
+* **Profile Onboarding**:
+  * Mandatory profile completion step before app access (`name`, `mobileNumber`, `address`).
+* **Task Management & Service Selection**:
+  * Interactive task catalogue grouped into 4 categories.
+  * Search bar filtering for catalogue services.
+  * Custom task creation screen with initial status selection.
+  * My Tasks list with status badge tags and task details view.
+* **Dynamic Host IP Detection**:
+  * Uses `expo-constants` (`hostUri`) to extract host machine IP over Wi-Fi automatically.
 
+---
+
+## 🛠️ Tech Stack
+
+* **Framework**: React Native + Expo (SDK 57)
+* **Routing**: Expo Router (v4 / ~57)
+* **Language**: TypeScript
+* **Form & Validation**: React Hook Form + Zod
+* **HTTP Client**: Axios with Bearer token interceptor
+* **Secure Storage**: `expo-secure-store`
+* **Animations**: Animated API & LayoutAnimations
+
+---
+
+## 📋 Quick Start
+
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+
+2. **Configure Environment Variables**:
+   ```bash
+   cp .env.example .env
+   ```
+   Set `EXPO_PUBLIC_API_URL` to your local backend API endpoint (e.g. `http://192.168.1.7:5000/api/v1`).
+
+3. **Start Development Server**:
+   ```bash
+   npx expo start
+   ```
+
+---
+
+## 📦 Building the Android APK
+
+### Option A: Local Gradle Build
+```bash
+# 1. Generate native android directory
+npx expo prebuild --platform android
+
+# 2. Build release APK
+cd android
+./gradlew assembleRelease
 ```
-src/
-├── api/          # API layer (client + per-resource functions)
-├── components/   # Reusable UI components
-├── constants/    # Route names + app config
-├── hooks/        # useAuth, useTasks
-├── screens/      # Feature screens (auth, onboarding, tasks)
-├── store/        # Auth context
-├── theme/        # Colors, spacing, typography
-├── types/        # TypeScript interfaces
-└── utils/        # Validation schemas, secure storage
+Output APK location: `android/app/build/outputs/apk/release/app-release.apk`.
+
+### Option B: Cloud EAS Build
+```bash
+npx eas-cli build -p android --profile preview
 ```
 
-## User Flow
+---
 
-```
-Register → Verify OTP → Login
-  └── Profile Incomplete → Profile Screen → Task Selection → Home
-  └── Profile Complete   → Home
-App Restart → Restore Auth → Home (if authenticated)
-```
-
-## Setup
-
-### 1. Configure environment
+## 🐙 Git Workflow
 
 ```bash
-cp .env.example .env
-```
-
-Edit `.env`:
-```
-EXPO_PUBLIC_API_URL=http://YOUR_LOCAL_IP:5000/api/v1
-```
-
-> Use your machine's LAN IP (not `localhost`) when testing on a physical Android device.
-
-### 2. Install dependencies
-
-```bash
-npm install
-```
-
-### 3. Start the backend
-
-```bash
-cd ../padosipro-backend
-npm run dev
-```
-
-### 4. Start the mobile app
-
-```bash
-npm start
-```
-
-Scan the QR code with **Expo Go** on Android.
-
-## Key Features
-
-- ✅ Register with email + OTP verification
-- ✅ Login with unverified account redirect to OTP
-- ✅ Secure JWT storage (Expo SecureStore)
-- ✅ Auth persistence across app restarts
-- ✅ Profile onboarding (first login only)
-- ✅ Task catalogue from API (grouped by category)
-- ✅ Task search + multi-select
-- ✅ Selected tasks saved and displayed on Home
-- ✅ Loading / error / empty states everywhere
-- ✅ Logout with token revocation
-
-## Build APK
-
-```bash
-npx eas build -p android --profile preview
-```
-
-Or for local build:
-```bash
-npx expo run:android
+git add .
+git commit -m "feat: updated android prebuild configs and documentation"
+git push origin main
 ```
